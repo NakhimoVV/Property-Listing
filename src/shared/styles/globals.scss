@@ -1,0 +1,31 @@
+body {
+  font-family: var(--font-family-base), sans-serif;
+  color: var(--color-white);
+  background-color: var(--color-black);
+}
+
+a,
+button,
+label,
+input,
+textarea,
+select,
+svg * {
+  transition-duration: var(--transition-duration);
+}
+
+a {
+  color: inherit;
+
+  @include hover {
+    color: var(--color-red-45);
+  }
+
+  &[class] {
+    text-decoration: none;
+  }
+}
+
+:focus-visible {
+  @include focus-visible;
+}
