@@ -2,9 +2,46 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  color: var(--color-black);
 
   &__pano {
-    background-image: url('@/shared/assets/images/hero-image.jpg') 50% / contain no-repeat;
+    background: url('@/shared/assets/images/hero-image.jpg')100% 0 / contain no-repeat;
     flex-grow: 1;
+
+    &-inner {
+      display: inline-flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      row-gap: 8px;
+      margin-top: 180px;
+      margin-left: 140px;
+
+      @include tablet {
+        margin-left: 112px;
+      }
+      @include tablet-above {
+        max-width: 417px;
+      }
+      @include mobile {
+        margin-top: 108px;
+        max-width: 280px;
+        margin-left: 64px;
+      }
+    }
+  }
+
+  &__title,
+  &__subtitle {
+    font-family: 'Outfit', sans-serif;
+  }
+
+  &__title {
+    font-size: 64px;
+    font-weight: 600;
+  }
+
+  &__subtitle {
+    font-size: 24px;
+    font-weight: 400;
   }
 }
