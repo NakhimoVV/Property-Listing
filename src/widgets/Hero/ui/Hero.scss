@@ -1,0 +1,10 @@
+.hero {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  &__pano {
+    background-image: url('@/shared/assets/images/hero-image.jpg') 50% / contain no-repeat;
+    flex-grow: 1;
+  }
+}
