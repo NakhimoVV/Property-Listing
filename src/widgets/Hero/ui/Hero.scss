@@ -1,43 +1,60 @@
 .hero {
+  position: relative;
+  z-index: var(--z-index-hero);
   display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+  min-height: 79dvh;
   color: var(--color-black);
+  flex-direction: column;
+
+  @include mobile {
+    min-height: 52dvh;
+  }
 
   &__pano {
-    background: url('@/shared/assets/images/hero-image.jpg')100% 0 / contain no-repeat;
+    background: url('@/shared/assets/images/hero-image.jpg') center / cover no-repeat;
     flex-grow: 1;
+
+    @include mobile {
+      background: url('@/shared/assets/images/hero-image-sm.jpg') center / cover no-repeat;
+    }
 
     &-inner {
       display: inline-flex;
+      max-width: 417px;
       flex-direction: column;
       flex-wrap: wrap;
-      row-gap: 8px;
       margin-top: 180px;
-      margin-left: 140px;
+      row-gap: 8px;
 
       @include tablet {
         margin-left: 112px;
       }
+
       @include tablet-above {
-        max-width: 417px;
+        margin-left: 140px;
       }
+
       @include mobile {
-        margin-top: 108px;
         max-width: 280px;
-        margin-left: 64px;
+        margin-left: 67px;
+        margin-top: 108px;
+        row-gap: 0;
       }
     }
   }
 
   &__title,
   &__subtitle {
-    font-family: 'Outfit', sans-serif;
+    font-family: Outfit, sans-serif;
   }
 
   &__title {
     font-size: 64px;
     font-weight: 600;
+
+    @include mobile {
+      font-size: 40px;
+    }
   }
 
   &__subtitle {
