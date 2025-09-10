@@ -1,4 +1,5 @@
 body {
+  font-size: 14px;
   font-family: var(--font-family-base), sans-serif;
   color: var(--color-white);
   background-color: var(--color-black);
@@ -28,21 +29,4 @@ a {
 
 :focus-visible {
   @include focus-visible;
-}
-
-.nav {
-  --navHeight: 112px;
-
-  position: relative;
-  z-index: var(--z-index-main);
-  display: flex;
-  height: var(--navHeight);
-  padding: 32px 40px;
-  background-color: var(--color-shadow-black);
-  border: var(--border);
-  border-radius: var(--border-radius);
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 48px;
-  margin-top: calc((var(--navHeight) - (var(--navHeight) / 2)) * -1);
 }

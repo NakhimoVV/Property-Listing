@@ -1,11 +1,12 @@
 import '@/shared/styles'
 import Hero from '@/widgets/Hero'
+import FilterPanel from '@/widgets/FilterPanel'
 
 function App() {
   return (
     <>
       <Hero />
-      <section className="container nav">some buttons</section>
+      <FilterPanel />
       <p className="read-the-docs container">
         Click on the Vite and React logos to learn more Lorem ipsum dolor sit
         amet, consectetur adipisicing elit. Delectus ducimus earum enim et ipsa,

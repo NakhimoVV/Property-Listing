@@ -1,3 +1,9 @@
+@use 'functions' as *;
+
+@mixin fluid-text($max: 48, $min: 16) {
+  font-size: fluid($max, $min);
+}
+
 @mixin hide {
   opacity: 0;
   visibility: hidden;
@@ -9,13 +15,14 @@
 }
 
 @mixin flex-center($isInLine: false) {
-  @if ($isInLine) {
+  @if $isInLine {
     display: inline-flex;
   } @else {
     display: flex;
   }
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
 }
 
 @mixin abs-cover {
@@ -52,18 +59,18 @@
   width: 1px !important;
   height: 1px !important;
   margin: -1px !important;
-  border: 0 !important;
   padding: 0 !important;
   white-space: nowrap !important;
-  clip-path: inset(100%) !important;
+  border: 0 !important;
   clip: rect(0 0 0 0) !important;
+  clip-path: inset(100%) !important;
   overflow: hidden !important;
 }
 
 @mixin focus-visible {
+  transition-duration: 0s !important;
   outline: 2px dashed var(--color-blue-4);
   outline-offset: 4px;
-  transition-duration: 0s !important;
 }
 
 @mixin disabled {
