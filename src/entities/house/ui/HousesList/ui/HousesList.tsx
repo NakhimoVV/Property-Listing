@@ -1,11 +1,25 @@
 import './HousesList.scss'
+import { useEffect } from 'react'
+import { useHousesStore } from '@/entities/house/model/store.ts'
 
-type HousesListProps = {}
+const HousesList = () => {
+  const { filteredHouses, fetchHouses } = useHousesStore()
 
-const HousesList = (props: HousesListProps) => {
-  const {} = props
+  useEffect(() => {
+    void fetchHouses()
+  }, [fetchHouses])
 
-  return <div className="houses-list"></div>
+  return (
+    <div className="houses-list">
+      <div className="houses-list__inner container">
+        <ul className="list">
+          {filteredHouses.map((house) => (
+            <li key={house.id}>{house.title}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
 }
 
 export default HousesList
