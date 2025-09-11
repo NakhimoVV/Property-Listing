@@ -16,6 +16,7 @@
     "lint:fix": "npm run lint:js:fix && npm run lint:scss:fix && npm run format"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "zustand": "^5.0.8"

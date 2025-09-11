@@ -1,4 +1,5 @@
 import './FilterPanel.scss'
+import Switch from '@/shared/ui/Switch'
 
 type FilterPanelProps = {}
 // TODO: возможно следует переместить куда-то по FSD
@@ -17,7 +18,9 @@ const FilterPanel = (props: FilterPanelProps) => {
             <button>Switzerland</button>
           </div>
           <div className="filter-panel__actions">
-            <div className="filter-panel__switch">Superhost</div>
+            <div className="filter-panel__switch">
+              <Switch title="Superhost" value={true} />
+            </div>
             <div className="filter-panel__select">Property type</div>
           </div>
         </div>
