@@ -1,0 +1,38 @@
+.house-card {
+  display: inline-flex;
+  max-width: 358px;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  flex-direction: column;
+  overflow: hidden;
+  row-gap: 20px;
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-white);
+    padding-bottom: 8px;
+  }
+
+  &__description {
+    padding-bottom: 16px;
+  }
+
+  &__capacity {
+    border-bottom: 1px solid var(--color-grey);
+    padding-bottom: 16px;
+  }
+
+  &__body,
+  &__footer {
+    color: var(--color-light);
+    padding-inline: 20px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 20px;
+  }
+}

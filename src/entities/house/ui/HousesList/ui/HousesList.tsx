@@ -1,24 +1,29 @@
 import './HousesList.scss'
 import { useEffect } from 'react'
 import { useHousesStore } from '@/entities/house/model/store.ts'
+import HouseCard from '@/entities/house/ui/HousesCard'
 
 const HousesList = () => {
   const { filteredHouses, fetchHouses } = useHousesStore()
+  const titleId = 'houses list'
 
   useEffect(() => {
     void fetchHouses()
   }, [fetchHouses])
 
   return (
-    <div className="houses-list">
+    <section className="houses-list" aria-labelledby={titleId}>
       <div className="houses-list__inner container">
-        <ul className="list">
+        <h2 className="houses-list__title" id={titleId}>Over 200 stays</h2>
+        <ul className="houses-list__body">
           {filteredHouses.map((house) => (
-            <li key={house.id}>{house.title}</li>
+            <li className="houses-list__item" key={house.id}>
+              <HouseCard {...house} />
+            </li>
           ))}
         </ul>
       </div>
-    </div>
+    </section>
   )
 }
 

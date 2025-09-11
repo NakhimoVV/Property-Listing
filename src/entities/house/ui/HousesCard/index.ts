@@ -1,3 +1,3 @@
-import HousesCard from './ui/HousesCard'
+import HouseCard from './ui/HouseCard'
 
-export default HousesCard
+export default HouseCard
