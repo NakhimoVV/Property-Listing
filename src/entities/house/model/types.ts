@@ -1,3 +1,7 @@
+import locationList from '@/entities/house/model/locationList.ts'
+
+export type Location = (typeof locationList)[number]
+
 export type House = {
   id: number
   title: string
@@ -5,7 +9,7 @@ export type House = {
   price: number
   rating: number
   superhost: boolean
-  location: string
+  location: Location
   capacity: {
     people: number
     bedroom: number

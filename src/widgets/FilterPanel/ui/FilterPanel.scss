@@ -19,4 +19,14 @@
       margin-top: calc(40px * -1);
     }
   }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    @include mobile {
+      flex-direction: column;
+    }
+  }
 }

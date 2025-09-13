@@ -3,10 +3,11 @@ import './Switch.scss'
 type SwitchProps = {
   title?: string
   value: boolean
+  onChange?: (value: boolean) => void
 }
 
 const Switch = (props: SwitchProps) => {
-  const { title, value } = props
+  const { title, value, onChange } = props
 
   return (
     <label className="switch-wrapper">
@@ -15,13 +16,14 @@ const Switch = (props: SwitchProps) => {
           className="switch__input"
           type="checkbox"
           role="switch"
-          aria-checked="true"
-          aria-label="Show superhost"
+          aria-checked={value}
+          aria-label={`Toggle switch ${title}`}
           checked={value}
+          onChange={(event) => onChange?.(event.target.checked)}
         />
         <span className="switch__circle"></span>
       </div>
-      {title && <span>{title}</span>}
+      {title && <span className="switch__title">{title}</span>}
     </label>
   )
 }

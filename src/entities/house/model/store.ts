@@ -17,6 +17,7 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
   filteredHouses: [],
   isLoading: false,
   filter: {
+    locations: [],
     superhost: true,
   },
 
@@ -34,31 +35,31 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
 
   setFilter: (newFilter) => {
     const { allHouses, filter } = get()
-    const mergedFilter = { ...filter, ...newFilter }
+    const updatedFilter = { ...filter, ...newFilter }
 
     const filtered = allHouses.filter((house) => {
-      if (mergedFilter.location && house.location !== mergedFilter.location)
-        return false
       if (
-        mergedFilter.superhost !== undefined &&
-        house.superhost !== mergedFilter.superhost
+        updatedFilter.locations.length > 0 &&
+        !updatedFilter.locations.includes(house.location)
       )
         return false
+      if (updatedFilter.superhost && !house.superhost) return false
       if (
-        mergedFilter.bedroom &&
-        house.capacity.bedroom !== mergedFilter.bedroom
+        updatedFilter.bedroom &&
+        house.capacity.bedroom !== updatedFilter.bedroom
       )
         return false
       return true
     })
 
-    set({ filteredHouses: filtered, filter: mergedFilter })
+    set({ filteredHouses: filtered, filter: updatedFilter })
   },
-  // TODO: надо подумать как быть с superhost
+
   resetFilter: () => {
     const { allHouses } = get()
     set({
       filter: {
+        locations: [],
         superhost: true,
       },
       filteredHouses: allHouses,

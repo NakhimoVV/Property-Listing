@@ -1,5 +1,5 @@
 export type Filter = {
-  location?: 'Finland' | 'Sweden' | 'Switzerland' | 'Norway'
+  locations: readonly string[]
   superhost: boolean
   bedroom?: number
 }
