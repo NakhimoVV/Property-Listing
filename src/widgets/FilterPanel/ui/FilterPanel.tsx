@@ -5,12 +5,12 @@ import CheckboxList from '@/shared/ui/CheckboxList'
 import locationList from '@/entities/house/model/locationList.ts'
 
 const FilterPanel = () => {
-  const { filter, setFilter } = useHousesStore()
+  const { filter, setFilter, resetFilter } = useHousesStore()
 
-  const handleToggleLocation = (loc: string) => {
-    const newLocations = filter.locations.includes(loc)
-      ? filter.locations.filter((l) => l !== loc)
-      : [...filter.locations, loc]
+  const handleToggleLocation = (location: string) => {
+    const newLocations = filter.locations.includes(location)
+      ? filter.locations.filter((item) => item !== location)
+      : [...filter.locations, location]
 
     setFilter({ locations: newLocations })
   }
@@ -20,7 +20,9 @@ const FilterPanel = () => {
       <div className="filter-panel__inner container">
         <div className="filter-panel__body">
           <div className="filter-panel__checkboxes">
-            <button aria-pressed="true">All Stays</button>
+            <button aria-pressed="true" onClick={() => resetFilter()}>
+              All Stays
+            </button>
             <CheckboxList
               legend="Choose locations"
               list={locationList}

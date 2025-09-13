@@ -1,2 +1,8 @@
 .checkbox-list {
+  display: flex;
+  gap: var(--gapItems, 8px);
+  
+  &__input-item {
+    display: none;
+  }
 }

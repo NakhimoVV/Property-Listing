@@ -10,6 +10,7 @@ type HousesStore = {
   fetchHouses: () => Promise<void>
   filter: Filter
   setFilter: (filter: Partial<Filter>) => void
+  resetFilter: () => void
 }
 
 export const useHousesStore = create<HousesStore>((set, get) => ({
@@ -41,14 +42,18 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
       if (
         updatedFilter.locations.length > 0 &&
         !updatedFilter.locations.includes(house.location)
-      )
+      ) {
         return false
-      if (updatedFilter.superhost && !house.superhost) return false
+      }
+      if (!updatedFilter.superhost && !house.superhost) {
+        return false
+      }
       if (
         updatedFilter.bedroom &&
         house.capacity.bedroom !== updatedFilter.bedroom
-      )
+      ) {
         return false
+      }
       return true
     })
 
