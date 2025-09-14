@@ -25,7 +25,7 @@ const Select = (props: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const [highlightedIndex, setHighlightedIndex] = useState(-1)
+  const [currentOptionIndex, setCurrentOptionIndex] = useState(-1)
 
   const IDs = {
     originalControl: id,
@@ -49,6 +49,23 @@ const Select = (props: SelectProps) => {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Фокус на выбранный элемент при открытии
+  useEffect(() => {
+    if (isOpen && dropdownRef.current) {
+      dropdownRef.current.focus()
+    }
+    if (value !== undefined) {
+      const selectedIndex = options.findIndex(
+        (option) => option.value === value,
+      )
+      if (selectedIndex !== -1) {
+        setCurrentOptionIndex(selectedIndex)
+      }
+    } else {
+      setCurrentOptionIndex(0)
+    }
+  }, [isOpen, value, options])
 
   // Обработка клавиатуры
   const handleButtonKeyDown = (
@@ -77,14 +94,11 @@ const Select = (props: SelectProps) => {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault()
-        setHighlightedIndex((prev) => {
-          const nextIndex = prev + 1
-          return nextIndex >= options.length ? 0 : nextIndex
-        })
+        setCurrentOptionIndex((prev) => prev + 1)
         break
       case 'ArrowUp':
         event.preventDefault()
-        setHighlightedIndex((prev) => {
+        setCurrentOptionIndex((prev) => {
           const nextIndex = prev - 1
           return nextIndex < 0 ? options.length - 1 : nextIndex
         })
@@ -92,8 +106,8 @@ const Select = (props: SelectProps) => {
       case 'Enter':
       case ' ':
         event.preventDefault()
-        if (highlightedIndex >= 0 && highlightedIndex < options.length) {
-          onChange(options[highlightedIndex].value)
+        if (currentOptionIndex >= 0 && currentOptionIndex < options.length) {
+          onChange(options[currentOptionIndex].value)
           setIsOpen(false)
         }
         break
@@ -106,28 +120,16 @@ const Select = (props: SelectProps) => {
         break
       case 'Home':
         event.preventDefault()
-        setHighlightedIndex(0)
+        setCurrentOptionIndex(0)
         break
       case 'End':
         event.preventDefault()
-        setHighlightedIndex(options.length - 1)
+        setCurrentOptionIndex(options.length - 1)
         break
     }
   }
 
-  // Фокус на выбранный элемент при открытии
-  useEffect(() => {
-    if (!isOpen) {
-      setHighlightedIndex(-1)
-    } else if (value !== undefined) {
-      const selectedIndex = options.findIndex(
-        (option) => option.value === value,
-      )
-      if (selectedIndex !== -1) {
-        setHighlightedIndex(selectedIndex)
-      }
-    }
-  }, [isOpen, value, options])
+  console.log(currentOptionIndex)
 
   return (
     <div className="select">
@@ -187,12 +189,14 @@ const Select = (props: SelectProps) => {
             id={IDs.dropdown}
             role="listbox"
             aria-labelledby={IDs.label}
+            tabIndex={0}
             onKeyDown={handleDropdownKeyDown}
-            tabIndex={-1}
           >
             {value && (
               <div
-                className="select__option"
+                className={clsx('select__option', {
+                  'is-current': currentOptionIndex === -1,
+                })}
                 onClick={() => {
                   onChange(undefined)
                   setIsOpen(false)
@@ -201,14 +205,15 @@ const Select = (props: SelectProps) => {
                 Сlear selection
               </div>
             )}
-            {options.map((option) => {
+            {options.map((option, index) => {
               const isSelected = value === option.value
+              const isHighlighted = currentOptionIndex === index
 
               return (
                 <div
                   className={clsx('select__option', {
                     'is-selected': isSelected,
-                    'is-current': isSelected,
+                    'is-current': isHighlighted,
                   })}
                   id={`${id}-option-${option.value}`}
                   role="option"
