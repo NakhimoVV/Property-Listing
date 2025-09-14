@@ -24,6 +24,7 @@
     --gapItems: 12px;
 
     display: flex;
+    font-weight: 700;
     align-items: center;
     gap: (var(--gapItems));
   }
@@ -35,6 +36,18 @@
 
     @include mobile {
       flex-direction: column;
+    }
+  }
+
+  &__reset-button {
+    padding: 8px 12px;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+
+    &.is-active {
+      background-color: var(--color-grey);
     }
   }
 }

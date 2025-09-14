@@ -3,6 +3,8 @@ import Switch from '@/shared/ui/Switch'
 import { useHousesStore } from '@/entities/house/model/store.ts'
 import CheckboxList from '@/shared/ui/CheckboxList'
 import locationList from '@/entities/house/model/locationList.ts'
+import clsx from 'clsx'
+import Select from '@/shared/ui/Select'
 
 const FilterPanel = () => {
   const { filter, setFilter, resetFilter } = useHousesStore()
@@ -20,7 +22,13 @@ const FilterPanel = () => {
       <div className="filter-panel__inner container">
         <div className="filter-panel__body">
           <div className="filter-panel__checkboxes">
-            <button aria-pressed="true" onClick={() => resetFilter()}>
+            <button
+              className={clsx('filter-panel__reset-button', {
+                'is-active': filter.locations.length === 0,
+              })}
+              type="button"
+              onClick={() => resetFilter()}
+            >
               All Stays
             </button>
             <CheckboxList
@@ -38,7 +46,12 @@ const FilterPanel = () => {
                 onChange={(isChecked) => setFilter({ superhost: isChecked })}
               />
             </div>
-            <div className="filter-panel__select">Property type</div>
+            <div className="filter-panel__select">
+              <Select
+                label="Property type"
+                options={[{ value: '1 bedroom' }, { value: '2 bedroom' }]}
+              />
+            </div>
           </div>
         </div>
       </div>

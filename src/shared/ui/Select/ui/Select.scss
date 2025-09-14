@@ -1,0 +1,136 @@
+.select {
+  --selectButtonArrowIconUrl: url('@/shared/assets/icons/Expand_down.svg');
+  --selectButtonArrowIconSize: 24px;
+
+  flex-shrink: 0;
+
+  &__original-control,
+  &__button {
+    min-width: 94px;
+  }
+
+  &__original-control {
+    background-image: var(--selectButtonArrowIconUrl);
+    background-position: 100% 50%; // x y
+    background-size: var(--selectButtonArrowIconSize);
+    appearance: none;
+    background-repeat: no-repeat;
+    padding-right: calc(
+      var(--selectButtonArrowIconSize)
+    );
+
+    @include mobile-above {
+      @include visually-hidden;
+    }
+
+    &:disabled {
+      & + .select__body {
+        @include disabled;
+
+        * {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  &__body {
+    position: relative;
+  }
+
+  &__button,
+  &__option {
+    cursor: pointer;
+    user-select: none;
+
+    * {
+      pointer-events: none;
+    }
+  }
+
+  &__button {
+    display: flex;
+    transition-duration: var(--transition-duration);
+    align-items: center;
+    column-gap: var(--selectButtonGapX);
+    justify-content: space-between;
+    padding-inline: var(--selectButtonPaddingX);
+
+    @include mobile {
+      @include visually-hidden;
+    }
+
+    &::after {
+      @include square(var(--selectButtonArrowIconSize));
+
+      background: var(--selectButtonArrowIconUrl) center/contain no-repeat;
+      transition-duration: inherit;
+      content: '';
+    }
+
+    &.is-expanded {
+      &::after {
+        rotate: 180deg;
+      }
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    display: grid;
+    min-width: 300px;
+    max-height: 250px;
+    padding: 4px;
+    background-color: var(--color-black-06);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    transition-duration: var(--transition-duration);
+    overflow-y: auto;
+    overscroll-behavior: none; // чтобы не продолжала скролиться целиком вся страница, когда список закончится
+    row-gap: 4px;
+
+    &.is-on-the-left-side {
+      left: 0;
+      transform-origin: 0 0;
+    }
+
+    &.is-on-the-right-side {
+      right: 0;
+      transform-origin: 100% 0;
+    }
+
+    &:not(.is-expanded) { // скрываем dropdown
+      @include hide;
+
+      scale: 0;
+    }
+  }
+
+  &__option {
+    display: flex;
+    padding: 10px;
+    border: var(--border);
+    border-radius: inherit;
+    align-items: center;
+    column-gap: 10px;
+    justify-content: space-between;
+
+    @include hover {
+      color: var(--color-white);
+      border-color: var(--color-white);
+    }
+
+    &.is-selected {
+      color: var(--color-white);
+
+      &::after {
+        content: '✔';
+      }
+    }
+
+    &.is-current {
+      border-color: var(--color-white);
+    }
+  }
+}

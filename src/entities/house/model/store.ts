@@ -45,7 +45,7 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
       ) {
         return false
       }
-      if (!updatedFilter.superhost && !house.superhost) {
+      if (!updatedFilter.superhost && house.superhost) {
         return false
       }
       if (

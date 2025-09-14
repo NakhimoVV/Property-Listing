@@ -1,7 +1,18 @@
 .checkbox-list {
   display: flex;
   gap: var(--gapItems, 8px);
-  
+
+  &__label-item {
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition-duration: var(--transition-duration);
+    user-select: none;
+
+    &:has(input:checked) {
+      background-color: var(--color-grey);
+    }
+  }
+
   &__input-item {
     display: none;
   }
