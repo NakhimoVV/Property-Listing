@@ -56,7 +56,7 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
       }
       return true
     })
-
+    console.log('updatedFilter: ', updatedFilter)
     set({ filteredHouses: filtered, filter: updatedFilter })
   },
 
@@ -66,6 +66,7 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
       filter: {
         locations: [],
         superhost: true,
+        bedroom: undefined,
       },
       filteredHouses: allHouses,
     })

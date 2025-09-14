@@ -49,7 +49,12 @@ const FilterPanel = () => {
             <div className="filter-panel__select">
               <Select
                 label="Property type"
-                options={[{ value: '1 bedroom' }, { value: '2 bedroom' }]}
+                value={filter.bedroom}
+                options={[
+                  { label: '1 bedroom', value: 1 },
+                  { label: '2 bedroom', value: 2 },
+                ]}
+                onChange={(value) => setFilter({ bedroom: value })}
               />
             </div>
           </div>

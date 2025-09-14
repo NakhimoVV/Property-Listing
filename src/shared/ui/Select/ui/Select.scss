@@ -1,36 +1,35 @@
 .select {
   --selectButtonArrowIconUrl: url('@/shared/assets/icons/Expand_down.svg');
   --selectButtonArrowIconSize: 24px;
+  --selectButtonPaddingX: 24px;
+  --selectButtonPaddingY: 13px;
+  --selectButtonGapX: 4px;
+  --minWidthSelect: 177px;
 
   flex-shrink: 0;
 
   &__original-control,
   &__button {
-    min-width: 94px;
+    min-width: var(--minWidthSelect);
+    padding: var(--selectButtonPaddingY) var(--selectButtonPaddingX);
+    color: inherit;
+    border: 2px solid var(--color-grey);
+    border-radius: var(--border-radius);
   }
 
   &__original-control {
+    background-color: var(--color-black-10);
     background-image: var(--selectButtonArrowIconUrl);
-    background-position: 100% 50%; // x y
+    background-position: calc(100% - var(--selectButtonPaddingX)) 50%;
     background-size: var(--selectButtonArrowIconSize);
     appearance: none;
     background-repeat: no-repeat;
     padding-right: calc(
-      var(--selectButtonArrowIconSize)
+      var(--selectButtonArrowIconSize) + var(--selectButtonPaddingX) + var(--selectButtonGapX)
     );
 
     @include mobile-above {
       @include visually-hidden;
-    }
-
-    &:disabled {
-      & + .select__body {
-        @include disabled;
-
-        * {
-          pointer-events: none;
-        }
-      }
     }
   }
 
@@ -42,19 +41,15 @@
   &__option {
     cursor: pointer;
     user-select: none;
-
-    * {
-      pointer-events: none;
-    }
   }
 
   &__button {
     display: flex;
+    background-color: transparent;
     transition-duration: var(--transition-duration);
     align-items: center;
     column-gap: var(--selectButtonGapX);
     justify-content: space-between;
-    padding-inline: var(--selectButtonPaddingX);
 
     @include mobile {
       @include visually-hidden;
@@ -68,7 +63,7 @@
       content: '';
     }
 
-    &.is-expanded {
+    &.is-open {
       &::after {
         rotate: 180deg;
       }
@@ -78,31 +73,21 @@
   &__dropdown {
     position: absolute;
     top: calc(100% + 4px);
+    right: 0;
     display: grid;
-    min-width: 300px;
+    min-width: var(--minWidthSelect);
     max-height: 250px;
     padding: 4px;
-    background-color: var(--color-black-06);
+    background-color: var(--color-black-10);
     border: var(--border);
     border-radius: var(--border-radius);
     transition-duration: var(--transition-duration);
     overflow-y: auto;
-    overscroll-behavior: none; // чтобы не продолжала скролиться целиком вся страница, когда список закончится
+    overscroll-behavior: none;
     row-gap: 4px;
+    transform-origin: 100% 0;
 
-    &.is-on-the-left-side {
-      left: 0;
-      transform-origin: 0 0;
-    }
-
-    &.is-on-the-right-side {
-      right: 0;
-      transform-origin: 100% 0;
-    }
-
-    &:not(.is-expanded) { // скрываем dropdown
-      @include hide;
-
+    &:not(.is-open) {
       scale: 0;
     }
   }

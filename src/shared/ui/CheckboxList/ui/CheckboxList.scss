@@ -1,6 +1,11 @@
 .checkbox-list {
-  display: flex;
+  display: inline-flex;
   gap: var(--gapItems, 8px);
+
+  @include mobile {
+    display: contents;
+    flex-wrap: wrap;
+  }
 
   &__label-item {
     padding: 8px 12px;

@@ -1,15 +1,15 @@
 import './Select.scss'
 import getIdFromLabel from '@/shared/lib/getIdFromlabel.ts'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 
 type SelectProps = {
   label: string
-  isLabelHidden: boolean
-  id: string
-  value: string
-  options: Array<{ value: string; isSelected?: boolean }>
-  onChange: (value: string) => void
+  isLabelHidden?: boolean
+  id?: string
+  value?: number
+  options: Array<{ label: string; value: number }>
+  onChange: (value: number | undefined) => void
 }
 
 const Select = (props: SelectProps) => {
@@ -23,11 +23,9 @@ const Select = (props: SelectProps) => {
   } = props
 
   const [isOpen, setIsOpen] = useState(false)
-  const [highlightedIndex, setHighlightedIndex] = useState<number>(
-    options.findIndex((o) => o.value === value),
-  )
-  const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
 
   const IDs = {
     originalControl: id,
@@ -35,54 +33,101 @@ const Select = (props: SelectProps) => {
     dropdown: `${id}-dropdown`,
   }
 
-  const selectedOption =
-    options.find(({ isSelected }) => isSelected) ?? options[0]
+  const selectedOption = options.find((option) => option.value === value)
 
-  // // Закрытие по клику вне компонента
-  // useEffect(() => {
-  //   const handleClickOutside = (e: MouseEvent) => {
-  //     if (
-  //       dropdownRef.current &&
-  //       !dropdownRef.current.contains(e.target as Node) &&
-  //       !buttonRef.current?.contains(e.target as Node)
-  //     ) {
-  //       setIsOpen(false)
-  //     }
-  //   }
-  //   document.addEventListener('mousedown', handleClickOutside)
-  //   return () => document.removeEventListener('mousedown', handleClickOutside)
-  // }, [])
-  //
-  // // Клавиатурная навигация
-  // const handleKeyDown = (e: React.KeyboardEvent) => {
-  //   if (!isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-  //     setIsOpen(true)
-  //     return
-  //   }
-  //
-  //   switch (e.key) {
-  //     case 'ArrowDown':
-  //       setHighlightedIndex((prev) => (prev + 1) % options.length)
-  //       break
-  //     case 'ArrowUp':
-  //       setHighlightedIndex(
-  //         (prev) => (prev - 1 + options.length) % options.length,
-  //       )
-  //       break
-  //     case 'Enter':
-  //     case ' ':
-  //       if (isOpen) {
-  //         onChange(options[highlightedIndex].value)
-  //         setIsOpen(false)
-  //       } else {
-  //         setIsOpen(true)
-  //       }
-  //       break
-  //     case 'Escape':
-  //       setIsOpen(false)
-  //       break
-  //   }
-  // }
+  // Закрытие по клику вне компонента
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        !buttonRef.current?.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Обработка клавиатуры
+  const handleButtonKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+  ) => {
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowUp':
+      case ' ':
+      case 'Enter':
+        event.preventDefault()
+        setIsOpen(true)
+        break
+      case 'Escape':
+        setIsOpen(false)
+        break
+      case 'Tab':
+        setIsOpen(false)
+        break
+    }
+  }
+
+  const handleDropdownKeyDown = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+  ) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault()
+        setHighlightedIndex((prev) => {
+          const nextIndex = prev + 1
+          return nextIndex >= options.length ? 0 : nextIndex
+        })
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        setHighlightedIndex((prev) => {
+          const nextIndex = prev - 1
+          return nextIndex < 0 ? options.length - 1 : nextIndex
+        })
+        break
+      case 'Enter':
+      case ' ':
+        event.preventDefault()
+        if (highlightedIndex >= 0 && highlightedIndex < options.length) {
+          onChange(options[highlightedIndex].value)
+          setIsOpen(false)
+        }
+        break
+      case 'Escape':
+        event.preventDefault()
+        setIsOpen(false)
+        break
+      case 'Tab':
+        setIsOpen(false)
+        break
+      case 'Home':
+        event.preventDefault()
+        setHighlightedIndex(0)
+        break
+      case 'End':
+        event.preventDefault()
+        setHighlightedIndex(options.length - 1)
+        break
+    }
+  }
+
+  // Фокус на выбранный элемент при открытии
+  useEffect(() => {
+    if (!isOpen) {
+      setHighlightedIndex(-1)
+    } else if (value !== undefined) {
+      const selectedIndex = options.findIndex(
+        (option) => option.value === value,
+      )
+      if (selectedIndex !== -1) {
+        setHighlightedIndex(selectedIndex)
+      }
+    }
+  }, [isOpen, value, options])
 
   return (
     <div className="select">
@@ -98,56 +143,88 @@ const Select = (props: SelectProps) => {
       <select
         className="select__original-control"
         id={IDs.originalControl}
-        tabIndex={-1} // чтобы убрать этот элемент из списка фокусируемых
-        defaultValue={selectedOption.value}
+        aria-hidden="true"
+        tabIndex={-1}
+        value={value ?? ''}
+        onChange={(event) => {
+          const targetValue = event.target.value
+            ? Number(event.target.value)
+            : undefined
+          onChange(targetValue)
+        }}
       >
         <option value="">{label}</option>
-        {options.map(({ value }, index) => (
-          <option value={value} key={index}>
-            {value}
+        {options.map(({ label, value }) => (
+          <option value={value} key={label}>
+            {label}
           </option>
         ))}
       </select>
       <div className="select__body">
-        <div
-          className="select__button"
-          role="combobox"
+        <button
+          className={clsx('select__button', {
+            'is-open': isOpen,
+          })}
+          type="button"
+          ref={buttonRef}
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls={IDs.dropdown}
           aria-labelledby={IDs.label}
-          tabIndex={0} // Чтобы появилась возможность фокуса
+          tabIndex={0}
           onClick={() => setIsOpen((prevState) => !prevState)}
+          onKeyDown={handleButtonKeyDown}
         >
-          {selectedOption.value}
-        </div>
-        <div
-          className="select__dropdown"
-          id={IDs.dropdown}
-          role="listbox"
-          aria-labelledby={IDs.label}
-          data-js-select-dropdown=""
-        >
-          {options.map((option, index) => {
-            const { value, isSelected = false } = option
+          {selectedOption ? selectedOption.label : label}
+        </button>
 
-            return (
+        {isOpen && (
+          <div
+            className={clsx('select__dropdown', {
+              'is-open': isOpen,
+            })}
+            ref={dropdownRef}
+            id={IDs.dropdown}
+            role="listbox"
+            aria-labelledby={IDs.label}
+            onKeyDown={handleDropdownKeyDown}
+            tabIndex={-1}
+          >
+            {value && (
               <div
-                className={clsx('select__option', {
-                  'is-selected': isSelected,
-                  'is-current': isSelected, // состояние фокусировки с клавиатуры
-                })}
-                id={`${id}-option-${index}`}
-                role="option"
-                aria-selected={isSelected}
-                data-js-select-option=""
-                key={index}
+                className="select__option"
+                onClick={() => {
+                  onChange(undefined)
+                  setIsOpen(false)
+                }}
               >
-                {value}
+                Сlear selection
               </div>
-            )
-          })}
-        </div>
+            )}
+            {options.map((option) => {
+              const isSelected = value === option.value
+
+              return (
+                <div
+                  className={clsx('select__option', {
+                    'is-selected': isSelected,
+                    'is-current': isSelected,
+                  })}
+                  id={`${id}-option-${option.value}`}
+                  role="option"
+                  aria-selected={isSelected}
+                  onClick={() => {
+                    onChange(option.value)
+                    setIsOpen(false)
+                  }}
+                  key={option.label}
+                >
+                  {option.label}
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )
