@@ -4,51 +4,6 @@
   font-size: fluid($max, $min);
 }
 
-@mixin hide {
-  opacity: 0;
-  visibility: hidden;
-}
-
-@mixin show {
-  opacity: 1;
-  visibility: visible;
-}
-
-@mixin flex-center($isInLine: false) {
-  @if $isInLine {
-    display: inline-flex;
-  } @else {
-    display: flex;
-  }
-
-  align-items: center;
-  justify-content: center;
-}
-
-@mixin abs-cover {
-  position: absolute;
-  inset: 0;
-}
-
-@mixin abs-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-}
-
-@mixin abs-x {
-  position: absolute;
-  left: 50%;
-  translate: -50%;
-}
-
-@mixin abs-y {
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-}
-
 @mixin square($size) {
   width: $size;
   height: $size;
@@ -71,11 +26,4 @@
   transition-duration: 0s !important;
   outline: 2px dashed var(--color-blue);
   outline-offset: 4px;
-}
-
-@mixin disabled {
-  &:disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
 }
