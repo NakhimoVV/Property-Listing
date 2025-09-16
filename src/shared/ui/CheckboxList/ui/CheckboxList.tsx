@@ -1,4 +1,5 @@
 import './CheckboxList.scss'
+import getIdFromLabel from '@/shared/lib/getIdFromlabel.ts'
 
 type CheckboxListProps<T extends string> = {
   legend: string
@@ -15,17 +16,26 @@ const CheckboxList = <T extends string>(props: CheckboxListProps<T>) => {
       <legend className="checkbox-list__legend visually-hidden">
         {legend}
       </legend>
-      {list.map((item) => (
-        <label className="checkbox-list__label-item" key={item}>
-          <input
-            className="checkbox-list__input-item"
-            type="checkbox"
-            checked={selected.includes(item)}
-            onChange={() => onToggle(item)}
-          />
-          <span>{item}</span>
-        </label>
-      ))}
+      {list.map((item) => {
+        const titleId = getIdFromLabel(item)
+
+        return (
+          <label
+            className="checkbox-list__label-item"
+            htmlFor={titleId}
+            key={item}
+          >
+            <input
+              className="checkbox-list__input-item"
+              type="checkbox"
+              id={titleId}
+              checked={selected.includes(item)}
+              onChange={() => onToggle(item)}
+            />
+            <span>{item}</span>
+          </label>
+        )
+      })}
     </fieldset>
   )
 }

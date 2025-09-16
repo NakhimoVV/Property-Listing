@@ -52,18 +52,15 @@ const Select = (props: SelectProps) => {
 
   // Фокус на выбранный элемент при открытии
   useEffect(() => {
-    if (isOpen && dropdownRef.current) {
-      dropdownRef.current.focus()
-    }
-    if (value !== undefined) {
-      const selectedIndex = options.findIndex(
-        (option) => option.value === value,
-      )
-      if (selectedIndex !== -1) {
-        setCurrentOptionIndex(selectedIndex)
+    if (isOpen) {
+      if (value !== undefined) {
+        const selectedIndex = options.findIndex(
+          (option) => option.value === value,
+        )
+        setCurrentOptionIndex(selectedIndex !== -1 ? selectedIndex : 0)
+      } else {
+        setCurrentOptionIndex(-1)
       }
-    } else {
-      setCurrentOptionIndex(0)
     }
   }, [isOpen, value, options])
 
@@ -71,65 +68,59 @@ const Select = (props: SelectProps) => {
   const handleButtonKeyDown = (
     event: React.KeyboardEvent<HTMLButtonElement>,
   ) => {
-    switch (event.key) {
-      case 'ArrowDown':
-      case 'ArrowUp':
-      case ' ':
-      case 'Enter':
+    if (!isOpen) {
+      if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
         event.preventDefault()
         setIsOpen(true)
-        break
-      case 'Escape':
-        setIsOpen(false)
-        break
-      case 'Tab':
-        setIsOpen(false)
-        break
+      }
+      return
     }
-  }
 
-  const handleDropdownKeyDown = (
-    event: React.KeyboardEvent<HTMLDivElement>,
-  ) => {
+    // Когда список открыт — управляем индексом
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault()
-        setCurrentOptionIndex((prev) => prev + 1)
+        setCurrentOptionIndex((prev) => {
+          const total = options.length
+          const next = prev + 1
+          return next >= total ? -1 : next
+        })
         break
       case 'ArrowUp':
         event.preventDefault()
         setCurrentOptionIndex((prev) => {
-          const nextIndex = prev - 1
-          return nextIndex < 0 ? options.length - 1 : nextIndex
+          const total = options.length
+          const next = prev - 1
+          return next < -1 ? total - 1 : next
         })
-        break
-      case 'Enter':
-      case ' ':
-        event.preventDefault()
-        if (currentOptionIndex >= 0 && currentOptionIndex < options.length) {
-          onChange(options[currentOptionIndex].value)
-          setIsOpen(false)
-        }
-        break
-      case 'Escape':
-        event.preventDefault()
-        setIsOpen(false)
-        break
-      case 'Tab':
-        setIsOpen(false)
         break
       case 'Home':
         event.preventDefault()
-        setCurrentOptionIndex(0)
+        setCurrentOptionIndex(-1)
         break
       case 'End':
         event.preventDefault()
         setCurrentOptionIndex(options.length - 1)
         break
+      case 'Enter':
+      case ' ':
+        event.preventDefault()
+        if (currentOptionIndex === -1) {
+          onChange(undefined)
+        } else if (currentOptionIndex >= 0) {
+          onChange(options[currentOptionIndex].value)
+        }
+        setIsOpen(false)
+        break
+      case 'Escape':
+        event.preventDefault()
+        setIsOpen(false)
+        break
+      case 'Tab':
+        setIsOpen(false)
+        break
     }
   }
-
-  console.log(currentOptionIndex)
 
   return (
     <div className="select">
@@ -157,7 +148,7 @@ const Select = (props: SelectProps) => {
       >
         <option value="">{label}</option>
         {options.map(({ label, value }) => (
-          <option value={value} key={label}>
+          <option value={value} key={value}>
             {label}
           </option>
         ))}
@@ -173,7 +164,6 @@ const Select = (props: SelectProps) => {
           aria-haspopup="listbox"
           aria-controls={IDs.dropdown}
           aria-labelledby={IDs.label}
-          tabIndex={0}
           onClick={() => setIsOpen((prevState) => !prevState)}
           onKeyDown={handleButtonKeyDown}
         >
@@ -189,8 +179,6 @@ const Select = (props: SelectProps) => {
             id={IDs.dropdown}
             role="listbox"
             aria-labelledby={IDs.label}
-            tabIndex={0}
-            onKeyDown={handleDropdownKeyDown}
           >
             {value && (
               <div
@@ -207,13 +195,13 @@ const Select = (props: SelectProps) => {
             )}
             {options.map((option, index) => {
               const isSelected = value === option.value
-              const isHighlighted = currentOptionIndex === index
+              const isCurrent = currentOptionIndex === index
 
               return (
                 <div
                   className={clsx('select__option', {
                     'is-selected': isSelected,
-                    'is-current': isHighlighted,
+                    'is-current': isCurrent,
                   })}
                   id={`${id}-option-${option.value}`}
                   role="option"
@@ -222,7 +210,7 @@ const Select = (props: SelectProps) => {
                     onChange(option.value)
                     setIsOpen(false)
                   }}
-                  key={option.label}
+                  key={option.value}
                 >
                   {option.label}
                 </div>

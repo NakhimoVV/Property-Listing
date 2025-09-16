@@ -2,6 +2,7 @@ import { create } from 'zustand/react'
 import { getHouses } from '@/entities/house/api/getHouses.ts'
 import type { House } from '@/entities/house/model/types.ts'
 import type { Filter } from '@/widgets/FilterPanel/model/types.ts'
+import { applyFilter } from '@/entities/house/model/applyFilter.ts'
 
 type HousesStore = {
   allHouses: House[]
@@ -13,14 +14,17 @@ type HousesStore = {
   resetFilter: () => void
 }
 
+const initialFilter: Filter = {
+  locations: [],
+  superhost: true,
+  bedroom: undefined,
+}
+
 export const useHousesStore = create<HousesStore>((set, get) => ({
   allHouses: [],
   filteredHouses: [],
   isLoading: false,
-  filter: {
-    locations: [],
-    superhost: true,
-  },
+  filter: initialFilter,
 
   fetchHouses: async () => {
     set({ isLoading: true })
@@ -38,36 +42,18 @@ export const useHousesStore = create<HousesStore>((set, get) => ({
     const { allHouses, filter } = get()
     const updatedFilter = { ...filter, ...newFilter }
 
-    const filtered = allHouses.filter((house) => {
-      if (
-        updatedFilter.locations.length > 0 &&
-        !updatedFilter.locations.includes(house.location)
-      ) {
-        return false
-      }
-      if (!updatedFilter.superhost && house.superhost) {
-        return false
-      }
-      if (
-        updatedFilter.bedroom &&
-        house.capacity.bedroom !== updatedFilter.bedroom
-      ) {
-        return false
-      }
-      return true
+    if (JSON.stringify(updatedFilter) === JSON.stringify(filter)) return
+
+    set({
+      filteredHouses: applyFilter(allHouses, updatedFilter),
+      filter: updatedFilter,
     })
-    console.log('updatedFilter: ', updatedFilter)
-    set({ filteredHouses: filtered, filter: updatedFilter })
   },
 
   resetFilter: () => {
     const { allHouses } = get()
     set({
-      filter: {
-        locations: [],
-        superhost: true,
-        bedroom: undefined,
-      },
+      filter: initialFilter,
       filteredHouses: allHouses,
     })
   },

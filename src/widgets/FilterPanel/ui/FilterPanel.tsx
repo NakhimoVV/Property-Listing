@@ -26,6 +26,7 @@ const FilterPanel = () => {
               className={clsx('filter-panel__reset-button', {
                 'is-active': filter.locations.length === 0,
               })}
+              title="Reset Filter"
               type="button"
               onClick={() => resetFilter()}
             >

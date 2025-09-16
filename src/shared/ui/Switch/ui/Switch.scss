@@ -36,7 +36,13 @@
     }
   }
 
+  &:has(.switch__input:focus-visible) {
+    @include focus-visible;
+  }
+
   &__input {
-    display: none;
+    appearance: none;
+
+    @include visually-hidden;
   }
 }
