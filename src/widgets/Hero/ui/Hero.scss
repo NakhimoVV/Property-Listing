@@ -2,16 +2,12 @@
   position: relative;
   z-index: var(--z-index-hero);
   display: flex;
-  min-height: 620px;
-
-  //  min-height: 79vh;
+  min-height: 79vh;
   color: var(--color-black);
   flex-direction: column;
 
   @include mobile {
-    min-height: 400px;
-
-    //  min-height: 52dvh;
+    min-height: 52dvh;
   }
 
   &__pano {
