@@ -11,7 +11,7 @@ const HouseCard = (props: Partial<House>) => {
   const titleId = `${title}-title`
 
   return (
-    <a className="house-card">
+    <a className="house-card" href="/">
       <header className="house-card__header">
         <img
           className="house-card__image"

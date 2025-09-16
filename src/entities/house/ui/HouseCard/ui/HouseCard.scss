@@ -3,9 +3,14 @@
   max-width: 358px;
   border: var(--border);
   border-radius: var(--border-radius);
+  transition-duration: var(--transition-duration);
   flex-direction: column;
   overflow: hidden;
   row-gap: 20px;
+
+  @include hover {
+    border-color: var(--color-blue);
+  }
 
   &__header {
     position: relative;
