@@ -1,15 +1,15 @@
 @font-face {
-  src: url("/fonts/Outfit.woff2") format("woff2-variations");
   font-style: normal;
-  font-family: 'Outfit';
+  font-family: Outfit;
   font-weight: 400 600;
   font-display: swap;
+  src: url("@/shared/assets/fonts/Outfit.woff2") format("woff2-variations");
 }
 
 @font-face {
-  src: url("/fonts/DMSans.woff2") format("woff2-variations");
   font-style: normal;
   font-family: "DM Sans";
   font-weight: 400 700;
   font-display: swap;
+  src: url("@/shared/assets/fonts/DMSans.woff2") format("woff2-variations");
 }

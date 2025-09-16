@@ -1,5 +1,5 @@
 import './Select.scss'
-import getIdFromLabel from '@/shared/lib/getIdFromlabel.ts'
+import getIdFromTitle from '@/shared/lib/getIdFromTitle.ts'
 import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 
@@ -15,7 +15,7 @@ type SelectProps = {
 const Select = (props: SelectProps) => {
   const {
     label,
-    id = getIdFromLabel(label),
+    id = getIdFromTitle(label),
     isLabelHidden = true,
     options,
     value,
@@ -136,7 +136,6 @@ const Select = (props: SelectProps) => {
       <select
         className="select__original-control"
         id={IDs.originalControl}
-        aria-hidden="true"
         tabIndex={-1}
         value={value ?? ''}
         onChange={(event) => {

@@ -1,14 +1,14 @@
 import '@/shared/styles'
 import Hero from '@/widgets/Hero'
 import FilterPanel from '@/widgets/FilterPanel'
-import HousesList from '@/entities/house/ui/HousesList'
+import HouseList from '@/entities/house/ui/HouseList'
 
 function App() {
   return (
     <>
       <Hero />
       <FilterPanel />
-      <HousesList />
+      <HouseList />
     </>
   )
 }

@@ -1,0 +1,40 @@
+.house-list {
+  &__inner {
+    display: grid;
+    row-gap: 32px;
+
+    @include mobile {
+      padding-inline: 0;
+
+      & .house-list__title {
+        padding-inline: var(--container-padding-x);
+      }
+    }
+  }
+
+  &__body {
+    --gridColumns: 3;
+
+    display: grid;
+    gap: 73px 32px;
+    grid-template-columns: repeat(var(--gridColumns), 1fr);
+
+    @include tablet {
+      --gridColumns: 2;
+
+      & li:nth-child(odd) {
+        justify-self: end;
+      }
+    }
+
+    @include mobile {
+      --gridColumns: 1;
+
+      justify-items: center;
+
+      & li:nth-child(odd) {
+        justify-self: auto;
+      }
+    }
+  }
+}

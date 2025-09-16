@@ -1,5 +1,5 @@
 import './Switch.scss'
-import getIdFromLabel from '@/shared/lib/getIdFromlabel.ts'
+import getIdFromTitle from '@/shared/lib/getIdFromTitle.ts'
 
 type SwitchProps = {
   title?: string
@@ -9,7 +9,7 @@ type SwitchProps = {
 
 const Switch = (props: SwitchProps) => {
   const { title, value, onChange } = props
-  const labelId = title ? getIdFromLabel(title) : 'checkbox-title'
+  const labelId = title ? getIdFromTitle(title) : 'checkbox-title'
 
   return (
     <label className="switch-wrapper" htmlFor={labelId}>

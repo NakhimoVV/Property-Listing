@@ -1,5 +1,5 @@
 import './CheckboxList.scss'
-import getIdFromLabel from '@/shared/lib/getIdFromlabel.ts'
+import getIdFromTitle from '@/shared/lib/getIdFromTitle.ts'
 
 type CheckboxListProps<T extends string> = {
   legend: string
@@ -17,7 +17,7 @@ const CheckboxList = <T extends string>(props: CheckboxListProps<T>) => {
         {legend}
       </legend>
       {list.map((item) => {
-        const titleId = getIdFromLabel(item)
+        const titleId = getIdFromTitle(item)
 
         return (
           <label
