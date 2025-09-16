@@ -2,12 +2,16 @@
   position: relative;
   z-index: var(--z-index-hero);
   display: flex;
-  min-height: 79vh;
+  min-height: 620px;
+
+  //  min-height: 79vh;
   color: var(--color-black);
   flex-direction: column;
 
   @include mobile {
-    min-height: 52dvh;
+    min-height: 400px;
+
+    //  min-height: 52dvh;
   }
 
   &__pano {
@@ -56,13 +60,5 @@
   &__subtitle {
     font-size: 24px;
     font-weight: 400;
-  }
-}
-
-body:has(iframe) .hero {
-  min-height: 620px;
-
-  @include mobile {
-    min-height: 400px;
   }
 }
